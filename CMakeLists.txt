@@ -8,4 +8,6 @@ include_directories(.)
 add_executable(ProjArvoreBinaria
         ArvoreBinaria.c
         ArvoreBinaria.h
-        main.c)
+        main.c
+        falhas.c
+        falhas.h)
