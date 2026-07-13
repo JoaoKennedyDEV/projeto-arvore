@@ -4,14 +4,14 @@
 #include "ArvoreBinaria.h"
 
 void exibir_menu() {
-    printf("\n===== MENU LISTA ENCADEADA =====\n");
-    printf("1. Cadastrar aluno \n");
-    printf("2. Listar Alunos\n");
-    printf("3. Lancar Notas\n");
-    printf("4. Lancar Faltas\n");
-    printf("5. Calcular Situaçao\n");
-    printf("6. Gerar Relatorio\n");
-    printf("7. Aluno com a maior meia\n");
+    printf("\n===== MENU =====\n");
+    printf("1. Criar NO \n");
+    printf("2. \n");
+    printf("3. \n");
+    printf("4. \n");
+    printf("5. \n");
+    printf("6. \n");
+    printf("7. \n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
 }

@@ -194,6 +194,10 @@ void posOrdem_ArvBin(ArvBin *raiz){
     }
 }
 
+
+
+
+
 int totalUmFilho_ArvBin(ArvBin *raiz){
     if (raiz == NULL)
         return 0;
