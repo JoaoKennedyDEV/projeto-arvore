@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "ArvoreBinaria.h"
+#include "falhas.h"
 
 void exibir_menu() {
     printf("\n===== MENU =====\n");
@@ -17,10 +18,10 @@ void exibir_menu() {
 }
 
 int main() {
-    ArvBin* raiz = cria_ArvBin();
+    NO_DEC* raiz = criarNoDecisao();
     int opcao, matricula, aulas,bime;
-    int mat=1;
-    carregararquivo(raiz);
+    int f;
+    carregarArvoreArquivo(f);
     do {
         exibir_menu();
         scanf("%d", &opcao);
@@ -46,7 +47,7 @@ int main() {
                 printf("Opção inválida.\n");
         }
     } while (opcao != 0);
-    salvararquivo(raiz);
+    salvarArvoreArquivo(raiz);
     libera_ArvBin(raiz);
     return 0;
 }

@@ -24,6 +24,6 @@ int contarDiagnosticos(NO_DEC *raiz) {
     return contarDiagnosticos((*raiz).sim) + contarDiagnosticos((*raiz).nao);
 }
 int contarPerguntas(NO_DEC *raiz){}
-void salvarArvoreArquivo(NO_DEC *raiz, FILE *f){}
+void salvarArvoreArquivo(NO_DEC *raiz){}
 NO_DEC* carregarArvoreArquivo(FILE *f){}
 void registrarSessao(int idDiagnostico, char *data, FILE *f){}
