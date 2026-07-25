@@ -1,3 +1,6 @@
+#ifndef FALHAS_H
+#define FALHAS_H
+
 typedef struct NO_DEC {
     int id;
     char pergunta[200];
@@ -20,3 +23,5 @@ int contarPerguntas(NO_DEC *raiz);
 void salvarArvoreArquivo(NO_DEC *raiz, FILE *f);
 NO_DEC* carregarArvoreArquivo(FILE *f);
 void registrarSessao(int idDiagnostico, char *data, FILE *f);
+
+#endif
