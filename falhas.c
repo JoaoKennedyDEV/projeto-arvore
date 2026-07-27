@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include "falhas.h"
-#include "ArvoreBinaria.h"
 
 NO_DEC* criarNoDecisao(int id, char *pergunta, int folha){
 
@@ -79,8 +78,7 @@ void salvarArvoreArquivo(NO_DEC *raiz, FILE *f) {
 int calcularProfundidadeMax(NO_DEC *raiz){
     if (raiz == NULL)
         return 0;
-    /*if (*raiz == NULL)
-        return 0;*/
+
     int alt_esq = calcularProfundidadeMax(raiz->sim);
     int alt_dir = calcularProfundidadeMax(raiz->nao);
 
@@ -93,7 +91,7 @@ int calcularProfundidadeMax(NO_DEC *raiz){
 void liberarArvoreDecisao(NO_DEC* raiz){
     if(raiz == NULL)
         return;
-    libera_NO(raiz);//libera cada nó
+    libera_NO(raiz);
 }
 
 void libera_NO( NO_DEC* no){
@@ -189,15 +187,13 @@ NO_DEC* carregarArvoreArquivo(FILE *f) {
     if (f == NULL)
         return NULL;
 
-    /* lê o id (ou o marcador -1 de nó nulo) */
     if (fgets(linhaId, sizeof(linhaId), f) == NULL)
         return NULL;
 
     id = atoi(linhaId);
     if (id == -1)
-        return NULL;   /* fim do ramo */
+        return NULL;
 
-    /* lê os demais campos, removendo o '\n' do final de cada linha */
     if (fgets(pergunta, sizeof(pergunta), f) == NULL) return NULL;
     pergunta[strcspn(pergunta, "\n")] = '\0';
 
@@ -217,7 +213,6 @@ NO_DEC* carregarArvoreArquivo(FILE *f) {
     strcpy(no->referencia, referencia);
     strcpy(no->solucao, solucao);
 
-    /* mesma ordem em que foi salvo: primeiro o ramo SIM, depois o NÃO */
     no->sim = carregarArvoreArquivo(f);
     no->nao = carregarArvoreArquivo(f);
 
@@ -240,4 +235,17 @@ NO_DEC* buscarPorID(NO_DEC *raiz, int id){
         return aux;
 
     return buscarPorID(raiz->nao, id);
+}
+
+//Funcao extra
+void buscarPorPalavraChave(NO_DEC *raiz, char *palavra){
+
+    if(raiz == NULL)
+        return;
+
+    if(strstr(raiz->pergunta, palavra) != NULL)
+        printf("Encontrado -> id=%d | %s\n", raiz->id, raiz->pergunta);
+
+    buscarPorPalavraChave(raiz->sim, palavra);
+    buscarPorPalavraChave(raiz->nao, palavra);
 }

@@ -27,6 +27,7 @@ void navegarDiagnostico(NO_DEC *raiz);
 void exibirArvoreCompleta(NO_DEC *raiz, int nivel);
 int calcularProfundidadeMax(NO_DEC *raiz);
 NO_DEC* buscarPorID(NO_DEC *raiz, int id);
+void buscarPorPalavraChave(NO_DEC *raiz, char *palavra);
 
 void salvarArvoreArquivo(NO_DEC *raiz, FILE *f);
 NO_DEC* carregarArvoreArquivo(FILE *f);

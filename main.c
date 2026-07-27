@@ -1,14 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ArvoreBinaria.h"
 #include "falhas.h"
 
 #define MAX_NOS 100
 
-/* Guarda ponteiros para TODOS os nós já criados, mesmo antes de
-   serem encaixados na árvore. Sem isso não há como localizar um
-   nó "solto" (ainda não ligado à raiz) para virar filho de outro. */
 NO_DEC* todosNos[MAX_NOS];
 int totalNos = 0;
 
@@ -24,12 +20,11 @@ void exibir_menu() {
     printf("8. Bustar por ID\n");
     printf("9. Regiatrar Sessao\n");
     printf("10. Liberar Arvore\n");
+    printf("11. Buscar por palavra-chave\n");
     printf("0. Sair\n");
     printf("Escolha uma opção: ");
 }
 
-/* Procura um nó pelo id na lista de todos os nós criados
-   (inclusive os que ainda não foram inseridos na árvore) */
 NO_DEC* buscarNaLista(int id) {
     int i;
     for (i = 0; i < totalNos; i++) {
@@ -39,9 +34,6 @@ NO_DEC* buscarNaLista(int id) {
     return NULL;
 }
 
-/* Percorre uma árvore já montada (ex: carregada de arquivo) e
-   registra cada nó em todosNos, para que a opção 4 consiga
-   encontrá-los depois. */
 void preencherListaNos(NO_DEC *raiz) {
     if (raiz == NULL)
         return;
@@ -57,7 +49,6 @@ int main() {
     char pergunta[200],solucao[400],referencia[100],data[50];
     NO_DEC *aux, *novo;
 
-    /* Tenta carregar uma árvore salva anteriormente */
     FILE *fCarga = fopen("arquivo.txt", "r");
     if (fCarga != NULL) {
         raiz = carregarArvoreArquivo(fCarga);
@@ -97,10 +88,7 @@ int main() {
                     strcpy(novo->solucao, solucao);
                     strcpy(novo->referencia, referencia);
                 }
-
                 todosNos[totalNos++] = novo;
-
-
                 if (raiz == NULL) {
                     raiz = novo;
                     printf("\nNó criado e definido como RAIZ da árvore.\n");
@@ -125,8 +113,8 @@ int main() {
                 }
 
                 inserirFilho(aux, novo, respSim);
-                printf("\nNó %d inserido como filho (%s) de %d.\n",
-                       idFilho, respSim ? "SIM" : "NAO", idPai);                break;
+                printf("\nNó %d inserido como filho (%s) de %d.\n",idFilho, respSim ? "SIM" : "NAO", idPai);
+                break;
             case 5:
                 printf("Profundidade: %d\n",calcularProfundidadeMax(raiz));
                 break;
@@ -158,12 +146,20 @@ int main() {
                 }
                 registrarSessao(id, data, fs);
                 fclose(fs);
-                printf("\nSessão registrada.\n");                break;
+                printf("\nSessão registrada.\n");
+                break;
             case 10:
                 liberarArvoreDecisao(raiz);
                 raiz = NULL;
                 totalNos = 0;
                 break;
+            case 11: {
+                char palavra[100];
+                printf("Digite a palavra-chave: ");
+                scanf(" %[^\n]", palavra);
+                buscarPorPalavraChave(raiz, palavra);
+                break;
+            }
             case 0:
                 printf("Saindo...\n");
                 break;
