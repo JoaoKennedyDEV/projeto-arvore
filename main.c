@@ -18,15 +18,16 @@ void exibir_menu() {
 }
 
 int main() {
-    NO_DEC* raiz = criarNoDecisao();
-    int opcao, matricula, aulas,bime;
-    int f;
-    carregarArvoreArquivo(f);
+
+    NO_DEC* raiz = NULL;
+    int opcao;
+    //carregarArvoreArquivo(f);
     do {
         exibir_menu();
         scanf("%d", &opcao);
         switch (opcao) {
             case 1:
+
                 break;
             case 2:
                 break;

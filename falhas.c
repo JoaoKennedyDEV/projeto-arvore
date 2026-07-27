@@ -74,7 +74,7 @@ void salvarArvoreArquivo(NO_DEC *raiz, FILE *f) {
     salvarArvoreArquivo(raiz->nao, f);
 }
 
-int calcularprofundidadeMax(NO_DEC *raiz){
+int calcularProfundidadeMax(NO_DEC *raiz){
     if (raiz == NULL)
         return 0;
     /*if (*raiz == NULL)
@@ -92,8 +92,8 @@ void liberarArvoreDecisao(NO_DEC* raiz){
     if(raiz == NULL)
         return;
     libera_NO(raiz);//libera cada nó
-    free(raiz);//libera a raiz
 }
+
 void libera_NO( NO_DEC* no){
     if(no == NULL)
         return;
@@ -105,20 +105,52 @@ void libera_NO( NO_DEC* no){
 
 void exibirArvoreCompleta(NO_DEC *raiz, int nivel){
 
-    int i;
-
-    if(raiz == NULL)
+void navegarDiagnostico(NO_DEC *raiz) {
+    if(raiz == NULL){
+        printf("Árvore vazia.\n");
         return;
+    }
 
-    for(i=0; i<nivel; i++)
-        printf("   ");
+    NO_DEC *atual = raiz;
+    char resposta;
 
-    printf("%d - %s\n", raiz->id, raiz->pergunta);
+    while(atual != NULL && !atual->ehFolha){
 
-    exibirArvoreCompleta(raiz->sim, nivel + 1);
+        printf("\n%s (S/N): ", atual->pergunta);
+        scanf(" %c", &resposta);
 
-    exibirArvoreCompleta(raiz->nao, nivel + 1);
+        resposta = toupper(resposta);
+
+        while(resposta != 'S' && resposta != 'N'){
+            printf("Resposta inválida! Digite S ou N: ");
+            scanf(" %c", &resposta);
+            resposta = toupper(resposta);
+        }
+
+        if(resposta == 'S')
+            atual = atual->sim;
+        else
+            atual = atual->nao;
+    }
+
+    if(atual == NULL){
+        printf("\nDiagnóstico não encontrado.\n");
+        return;
+    }
+
+    printf("\n=============================\n");
+    printf("DIAGNÓSTICO\n");
+    printf("=============================\n");
+    printf("%s\n", atual->pergunta);
+
+    printf("\nSolução:\n");
+    printf("%s\n", atual->solucao);
+
+    printf("\nReferência:\n");
+    printf("%s\n", atual->referencia);
 }
+
+void exibirArvoreCompleta(NO_DEC *raiz, int nivel) {
 
 void registrarSessao(int idDiagnostico, char *data, FILE *f){
 
@@ -127,6 +159,8 @@ void registrarSessao(int idDiagnostico, char *data, FILE *f){
 
     fprintf(f,"%d %s\n", idDiagnostico, data);
 }
+
+NO_DEC* carregarArvoreArquivo(FILE *f) {
 
 NO_DEC* buscarPorID(NO_DEC *raiz, int id){
 
@@ -146,11 +180,10 @@ NO_DEC* buscarPorID(NO_DEC *raiz, int id){
     return buscarPorID(raiz->nao, id);
 }
 
-
-void navegarDiagnostico(NO_DEC *raiz) {
+void registrarSessao(int idDiagnostico, char *data, FILE *f) {
 
 }
 
-NO_DEC* carregarArvoreArquivo(FILE *f) {
+NO_DEC* buscarPorID(NO_DEC *raiz, int id) {
 
 }
