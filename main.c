@@ -39,12 +39,35 @@ NO_DEC* buscarNaLista(int id) {
     return NULL;
 }
 
+/* Percorre uma árvore já montada (ex: carregada de arquivo) e
+   registra cada nó em todosNos, para que a opção 4 consiga
+   encontrá-los depois. */
+void preencherListaNos(NO_DEC *raiz) {
+    if (raiz == NULL)
+        return;
+    if (totalNos < MAX_NOS)
+        todosNos[totalNos++] = raiz;
+    preencherListaNos(raiz->sim);
+    preencherListaNos(raiz->nao);
+}
+
 int main() {
     NO_DEC* raiz = NULL;
     int opcao,id,folha,idPai,idFilho,respSim;
     char pergunta[200],solucao[400],referencia[100],data[50];
     NO_DEC *aux, *novo;
-    //carregarArvoreArquivo(f);
+
+    /* Tenta carregar uma árvore salva anteriormente */
+    FILE *fCarga = fopen("arquivo.txt", "r");
+    if (fCarga != NULL) {
+        raiz = carregarArvoreArquivo(fCarga);
+        fclose(fCarga);
+        if (raiz != NULL) {
+            preencherListaNos(raiz);
+            printf("\nÁrvore carregada de 'arquivo.txt' (%d nó(s)).\n", totalNos);
+        }
+    }
+
     do {
         exibir_menu();
         scanf("%d", &opcao);

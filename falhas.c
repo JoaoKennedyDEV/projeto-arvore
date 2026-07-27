@@ -62,14 +62,15 @@ int contarPerguntas(NO_DEC *raiz){
 
 void salvarArvoreArquivo(NO_DEC *raiz, FILE *f) {
     if (raiz == NULL) {
+        fprintf(f, "-1\n");
         return;
     }
 
-    fprintf(f, "%d", raiz->id);
-    fprintf(f, "%s", raiz->pergunta);
-    fprintf(f, "%s", raiz->referencia);
-    fprintf(f, "%d", raiz->ehFolha);
-    fprintf(f, "%s", raiz->solucao);
+    fprintf(f, "%d\n", raiz->id);
+    fprintf(f, "%s\n", raiz->pergunta);
+    fprintf(f, "%s\n", raiz->referencia);
+    fprintf(f, "%d\n", raiz->ehFolha);
+    fprintf(f, "%s\n", raiz->solucao);
 
     salvarArvoreArquivo(raiz->sim, f);
     salvarArvoreArquivo(raiz->nao, f);
@@ -160,6 +161,12 @@ void exibirArvoreCompleta(NO_DEC *raiz, int nivel){
 
     printf("%d - %s\n", raiz->id, raiz->pergunta);
 
+    if (raiz->ehFolha) {
+        for(i=0; i<nivel+1; i++)
+            printf("   ");
+        printf("[Solução: %s | Referência: %s]\n", raiz->solucao, raiz->referencia);
+    }
+
     exibirArvoreCompleta(raiz->sim, nivel + 1);
 
     exibirArvoreCompleta(raiz->nao, nivel + 1);
@@ -173,7 +180,49 @@ void registrarSessao(int idDiagnostico, char *data, FILE *f){
     fprintf(f,"%d %s\n", idDiagnostico, data);
 }
 
-NO_DEC* carregarArvoreArquivo(FILE *f) {}
+NO_DEC* carregarArvoreArquivo(FILE *f) {
+    char linhaId[20];
+    char pergunta[200], referencia[100], solucao[400];
+    int id, ehFolha;
+    NO_DEC *no;
+
+    if (f == NULL)
+        return NULL;
+
+    /* lê o id (ou o marcador -1 de nó nulo) */
+    if (fgets(linhaId, sizeof(linhaId), f) == NULL)
+        return NULL;
+
+    id = atoi(linhaId);
+    if (id == -1)
+        return NULL;   /* fim do ramo */
+
+    /* lê os demais campos, removendo o '\n' do final de cada linha */
+    if (fgets(pergunta, sizeof(pergunta), f) == NULL) return NULL;
+    pergunta[strcspn(pergunta, "\n")] = '\0';
+
+    if (fgets(referencia, sizeof(referencia), f) == NULL) return NULL;
+    referencia[strcspn(referencia, "\n")] = '\0';
+
+    if (fgets(linhaId, sizeof(linhaId), f) == NULL) return NULL;
+    ehFolha = atoi(linhaId);
+
+    if (fgets(solucao, sizeof(solucao), f) == NULL) return NULL;
+    solucao[strcspn(solucao, "\n")] = '\0';
+
+    no = criarNoDecisao(id, pergunta, ehFolha);
+    if (no == NULL)
+        return NULL;
+
+    strcpy(no->referencia, referencia);
+    strcpy(no->solucao, solucao);
+
+    /* mesma ordem em que foi salvo: primeiro o ramo SIM, depois o NÃO */
+    no->sim = carregarArvoreArquivo(f);
+    no->nao = carregarArvoreArquivo(f);
+
+    return no;
+}
 
 NO_DEC* buscarPorID(NO_DEC *raiz, int id){
 
