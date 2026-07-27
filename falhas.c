@@ -79,8 +79,8 @@ int calcularProfundidadeMax(NO_DEC *raiz){
         return 0;
     /*if (*raiz == NULL)
         return 0;*/
-    int alt_esq = calcularprofundidadeMax(raiz->sim);
-    int alt_dir = calcularprofundidadeMax(raiz->nao);
+    int alt_esq = calcularProfundidadeMax(raiz->sim);
+    int alt_dir = calcularProfundidadeMax(raiz->nao);
 
     if (alt_esq > alt_dir)
         return (alt_esq + 1);
@@ -102,8 +102,6 @@ void libera_NO( NO_DEC* no){
     free(no);
     no = NULL;
 }
-
-void exibirArvoreCompleta(NO_DEC *raiz, int nivel){
 
 void navegarDiagnostico(NO_DEC *raiz) {
     if(raiz == NULL){
@@ -150,7 +148,21 @@ void navegarDiagnostico(NO_DEC *raiz) {
     printf("%s\n", atual->referencia);
 }
 
-void exibirArvoreCompleta(NO_DEC *raiz, int nivel) {
+void exibirArvoreCompleta(NO_DEC *raiz, int nivel){
+    int i;
+
+    if(raiz == NULL)
+        return;
+
+    for(i=0; i<nivel; i++)
+        printf("   ");
+
+    printf("%d - %s\n", raiz->id, raiz->pergunta);
+
+    exibirArvoreCompleta(raiz->sim, nivel + 1);
+
+    exibirArvoreCompleta(raiz->nao, nivel + 1);
+}
 
 void registrarSessao(int idDiagnostico, char *data, FILE *f){
 
@@ -160,7 +172,7 @@ void registrarSessao(int idDiagnostico, char *data, FILE *f){
     fprintf(f,"%d %s\n", idDiagnostico, data);
 }
 
-NO_DEC* carregarArvoreArquivo(FILE *f) {
+NO_DEC* carregarArvoreArquivo(FILE *f) {}
 
 NO_DEC* buscarPorID(NO_DEC *raiz, int id){
 
@@ -178,12 +190,4 @@ NO_DEC* buscarPorID(NO_DEC *raiz, int id){
         return aux;
 
     return buscarPorID(raiz->nao, id);
-}
-
-void registrarSessao(int idDiagnostico, char *data, FILE *f) {
-
-}
-
-NO_DEC* buscarPorID(NO_DEC *raiz, int id) {
-
 }
